@@ -62,15 +62,10 @@ namespace MoonSharpDemo
             var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
             foreach (var fullName in files)
             {
-                var context = File.ReadAllText(fullName);
-                Modules[GetKey(fullName)] = context;
+                Modules[GetKey(fullName)] = File.ReadAllText(fullName);;
             }
 
-            // foreach (var m in Modules)
-            // {
-            //     Console.WriteLine(m.Key);
-            // }
-
+            // 테스트용 엔트리 파일 실행
             var mainFile = Modules.TryGetValue("main", out var stream);
             _script.DoString(stream);
         }
