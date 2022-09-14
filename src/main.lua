@@ -1,4 +1,5 @@
 ﻿-- main.lua
-local t = require("lib.lib1.lua")
-
-t.logger("Hello, World")
+local t = require("lib/lib1")
+t.logger("Module first")
+local s = require("lib/lib1")
+s.logger("Module second")
