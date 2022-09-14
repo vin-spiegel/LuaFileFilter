@@ -16,8 +16,13 @@ namespace MoonSharpDemo
             Stream = stream;
         }
         public bool IsModule { get; set; }
-        public DynValue Cached { get; set; }
+        public DynValue CachedDynValue { get; set; }
         public string Stream { get; set; }
+    }
+
+    public static class MoonSharpExtensions
+    {
+        public static bool IsNull(this DynValue value) => value == null || value.Equals(DynValue.Void);
     }
 
     public static class ScriptManager
@@ -49,16 +54,21 @@ namespace MoonSharpDemo
         {
             var key = GetKeyFromLuaScript(path);
 
-            if (Modules.TryGetValue(key, out var file))
+            if (!Modules.TryGetValue(key, out var file))
             {
-                if (file.Cached != null)
-                    return file.Cached;
-                
-                return Run(file);
+                Console.WriteLine($"Error: module not found {path}");
+                return null;
             }
-            
-            Console.WriteLine($"Error: module not found {path}");
-            return null;
+
+            Console.WriteLine(file.CachedDynValue == null);
+            // 모듈임
+            if (!file.CachedDynValue.IsNull())
+            {
+                Console.WriteLine(file.CachedDynValue.Type);
+                return file.CachedDynValue;
+            }
+                
+            return Run(file);
         }
 
         private static string GetKeyFromLuaScript(string path) 
@@ -74,8 +84,9 @@ namespace MoonSharpDemo
 
         public static DynValue Run(LuaFile file)
         {
-            file.Cached =  _script.DoString(file.Stream);
-            return file.Cached;
+            file.CachedDynValue = _script.DoString(file.Stream);
+            file.IsModule = file.CachedDynValue != null;
+            return file.CachedDynValue;
         }
 
         /// <summary>

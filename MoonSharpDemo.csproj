@@ -52,6 +52,7 @@
     <ItemGroup>
       <Content Include="src\lib\lib1.lua" />
       <Content Include="src\lib\middleclass\middleclass.lua" />
+      <Content Include="src\lib\void.lua" />
       <Content Include="src\main.lua" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
