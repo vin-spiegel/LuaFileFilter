@@ -75,7 +75,7 @@ namespace MoonSharpDemo
         }
 
         /// <summary xml:lang="ko">
-        /// 스크립트 실행, return값이 있는 라이브러리 모듈은 한번만 실행합니다.
+        /// return 값이 있는 라이브러리 모듈은 한번만 실행합니다.
         /// </summary>
         private static DynValue DoStringLuaFile(LuaFile file)
         {
