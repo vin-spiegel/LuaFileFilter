@@ -53,6 +53,7 @@
       <Content Include="src\lib\test_library.lua" />
       <Content Include="src\lib\middleclass\middleclass.lua" />
       <Content Include="src\lib\unused.lua" />
+      <Content Include="src\lib\wait.lua" />
       <Content Include="src\main.lua" />
       <Content Include="src\test.lua" />
     </ItemGroup>

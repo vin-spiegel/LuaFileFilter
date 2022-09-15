@@ -13,12 +13,13 @@ namespace MoonSharpDemo
         {
             ScriptManager.Init();
             
+            ScriptManager.Load();
             // ScriptRunSync
-            var modules = ScriptManager.Load();
-            foreach (var file in modules)
-            {
-                ScriptManager.Run(file.Value);
-            }
+            // var modules = ScriptManager.Load();
+            // foreach (var file in modules)
+            // {
+            //     ScriptManager.Run(file.Value);
+            // }
         }
     }
 }
