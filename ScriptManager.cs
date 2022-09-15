@@ -16,6 +16,7 @@ namespace MoonSharpDemo
             Stream = stream;
         }
         public bool IsModule { get; set; }
+        public bool Inited { get; set; }
         public DynValue CachedDynValue { get; set; }
         public string Stream { get; set; }
     }
@@ -39,7 +40,7 @@ namespace MoonSharpDemo
         /// <summary>
         /// [파일이름][스크립트]
         /// </summary>
-        private static readonly Dictionary<string, LuaFile> Modules = new Dictionary<string, LuaFile>();
+        private static readonly Dictionary<string, LuaFile> modules = new Dictionary<string, LuaFile>();
 
         public static void Init()
         {
@@ -54,14 +55,12 @@ namespace MoonSharpDemo
         {
             var key = GetKeyFromLuaScript(path);
 
-            if (!Modules.TryGetValue(key, out var file))
+            if (!modules.TryGetValue(key, out var file))
             {
                 Console.WriteLine($"Error: module not found {path}");
                 return null;
             }
 
-            Console.WriteLine(file.CachedDynValue == null);
-            
             // Dynamic Value가 모듈일땐 캐시 데이터 리턴
             if (file.CachedDynValue.IsModule())
                 return file.CachedDynValue;
@@ -82,25 +81,32 @@ namespace MoonSharpDemo
 
         public static DynValue Run(LuaFile file)
         {
+            if (file.CachedDynValue == null)
+                file.Inited = true;
+
+            if (file.Inited && file.CachedDynValue != null && file.CachedDynValue.IsModule())
+                return file.CachedDynValue;
+            
             file.CachedDynValue = _script.DoString(file.Stream);
-            file.IsModule = file.CachedDynValue != null;
             return file.CachedDynValue;
         }
 
         /// <summary>
         /// 모듈 로딩하여 딕셔너리에 적재
         /// </summary>
-        public static void Load()
+        public static void Load(string path = null)
         {
             var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
             foreach (var fullName in files)
             {
-                Modules[GetKey(fullName)] = new LuaFile(File.ReadAllText(fullName));;
+                modules[GetKey(fullName)] = new LuaFile(File.ReadAllText(fullName));;
             }
 
-            // 테스트용 엔트리 파일 실행 (main.lua)
-            if (Modules.TryGetValue("main", out var file) && file != null) 
-                _script.DoString(file.Stream);
+            // ScriptRunSync
+            foreach (var file in modules)
+            {
+                Run(file.Value);
+            }
         }
     }
 }

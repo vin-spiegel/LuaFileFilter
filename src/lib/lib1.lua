@@ -7,6 +7,5 @@ t.logger = function(...)
     print(...)
 end
 
-print("Module lib1 loaded")
-
+print("module lib1 loaded")
 return t

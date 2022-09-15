@@ -1,1 +1,3 @@
-﻿print("not a module")
+﻿local t = require("lib/lib1")
+t.logger("void logging...")
+print("module loaded lib/void")
