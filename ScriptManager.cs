@@ -38,23 +38,22 @@ namespace MoonSharpDemo
         private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
 
         /// <summary>
-        /// .lua 지원 regex
-        /// </summary>
-        private static readonly string _pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
-        
-        /// <summary>
         /// [파일이름][스크립트]
         /// </summary>
         private static readonly Dictionary<string, LuaFile> modules = new Dictionary<string, LuaFile>();
+        
+        /// <summary>
+        /// .lua 지원 regex
+        /// </summary>
+        private static readonly string _pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
 
+        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, _pattern, "").Replace('.', '/');
+        
         public static void Init()
         {
             _script = new Script();
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
-
-        private static string GetKeyFromLuaScript(string path) 
-            => Regex.Replace(path, _pattern, "").Replace('.', '/');
 
         private static string GetKey(string fullName)
         {
