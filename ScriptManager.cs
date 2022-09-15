@@ -22,7 +22,7 @@ namespace MoonSharpDemo
 
     public static class MoonSharpExtensions
     {
-        public static bool IsNull(this DynValue value) => value == null || value.Equals(DynValue.Void);
+        public static bool IsModule(this DynValue value) => value != null && (value.Type == DataType.Table || value.Type == DataType.Function);
     }
 
     public static class ScriptManager
@@ -61,13 +61,11 @@ namespace MoonSharpDemo
             }
 
             Console.WriteLine(file.CachedDynValue == null);
-            // 모듈임
-            if (!file.CachedDynValue.IsNull())
-            {
-                Console.WriteLine(file.CachedDynValue.Type);
+            
+            // Dynamic Value가 모듈일땐 캐시 데이터 리턴
+            if (!file.CachedDynValue.IsModule())
                 return file.CachedDynValue;
-            }
-                
+
             return Run(file);
         }
 
