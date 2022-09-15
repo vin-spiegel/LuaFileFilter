@@ -52,8 +52,9 @@
     <ItemGroup>
       <Content Include="src\lib\test_library.lua" />
       <Content Include="src\lib\middleclass\middleclass.lua" />
-      <Content Include="src\lib\void.lua" />
+      <Content Include="src\lib\unused.lua" />
       <Content Include="src\main.lua" />
+      <Content Include="src\test.lua" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

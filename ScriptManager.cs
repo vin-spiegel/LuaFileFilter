@@ -11,19 +11,24 @@ namespace MoonSharpDemo
     /// </summary>
     public class LuaFile
     {
+        public string Stream { get; }
+        
         public LuaFile(string stream)
         {
             Stream = stream;
         }
-        public bool IsModule { get; set; }
-        public bool Inited { get; set; }
-        public DynValue CachedDynValue { get; set; }
-        public string Stream { get; set; }
-    }
-
-    public static class MoonSharpExtensions
-    {
-        public static bool IsModule(this DynValue value) => value != null && (value.Type == DataType.Table || value.Type == DataType.Function);
+        public DynValue Cache { get; set; }
+        
+        public bool IsModule
+        {
+            get
+            {
+                if (Cache == null)
+                    return false;
+                
+                return Cache.Type == DataType.Table || Cache.Type == DataType.Function;
+            }
+        }
     }
 
     public static class ScriptManager
@@ -48,8 +53,6 @@ namespace MoonSharpDemo
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
 
-        
-
         private static string GetKeyFromLuaScript(string path) 
             => Regex.Replace(path, _pattern, "").Replace('.', '/');
 
@@ -68,35 +71,29 @@ namespace MoonSharpDemo
         {
             var key = GetKeyFromLuaScript(path);
 
-            if (!modules.TryGetValue(key, out var file))
-            {
-                Console.WriteLine($"Error: module not found {path}");
-                return null;
-            }
-
-            // Dynamic Value가 모듈일땐 캐시 데이터 리턴
-            if (file.CachedDynValue.IsModule())
-                return file.CachedDynValue;
-
-            return Run(file);
+            if (modules.TryGetValue(key, out var file)) 
+                return Run(file);
+            
+            Console.WriteLine($"Error: module not found {path}");
+            return null;
         }
         
+        /// <summary xml:lang="ko">
+        /// 스크립트 실행, return값이 있는 라이브러리 모듈은 한번만 실행합니다.
+        /// </summary>
         public static DynValue Run(LuaFile file)
         {
-            if (file.CachedDynValue == null)
-                file.Inited = true;
+            if (file.IsModule)
+                return file.Cache;
 
-            if (file.Inited && file.CachedDynValue != null && file.CachedDynValue.IsModule())
-                return file.CachedDynValue;
-            
-            file.CachedDynValue = _script.DoString(file.Stream);
-            return file.CachedDynValue;
+            file.Cache = _script.DoString(file.Stream);
+            return file.Cache;
         }
 
-        /// <summary>
+        /// <summary xml:lang="ko">
         /// 모듈 로딩하여 딕셔너리에 적재
         /// </summary>
-        public static void Load(string path = null)
+        public static Dictionary<string, LuaFile> Load(string path = null)
         {
             var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
             foreach (var fullName in files)
@@ -104,11 +101,7 @@ namespace MoonSharpDemo
                 modules[GetKey(fullName)] = new LuaFile(File.ReadAllText(fullName));;
             }
 
-            // ScriptRunSync
-            foreach (var file in modules)
-            {
-                Run(file.Value);
-            }
+            return modules;
         }
     }
 }
