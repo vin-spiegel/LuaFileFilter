@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using MoonSharp.Interpreter;
-using MoonSharp.Interpreter.Loaders;
 
 namespace MoonSharpDemo
 {
@@ -12,12 +13,13 @@ namespace MoonSharpDemo
     /// </summary>
     public class LuaFile
     {
-        public string Stream { get; }
+        public string Context { get; }
         
-        public LuaFile(string stream)
+        public LuaFile(string context)
         {
-            Stream = stream;
+            Context = context;
         }
+        
         public DynValue Cache { get; set; }
         
         public bool IsModule
@@ -35,38 +37,41 @@ namespace MoonSharpDemo
     public static class ScriptManager
     {
         private static Script _script;
-        
-        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
+
+        private static readonly string RootDir =
+            Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
 
         /// <summary>
         /// [파일이름][스크립트]
         /// </summary>
         private static readonly Dictionary<string, LuaFile> modules = new Dictionary<string, LuaFile>();
-        
+
         /// <summary>
         /// .lua 지원 regex
         /// </summary>
-        private static readonly string _pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
+        private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
+
         private static readonly Regex _regexRequire = new Regex("require[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
 
-        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, _pattern, "").Replace('.', '/');
-        
+        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, Pattern, "").Replace('.', '/');
+
         public static void Init()
         {
             _script = new Script();
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
 
+        // TODO: Replace -> Span 최적화
         private static string GetKey(string fullName)
         {
             return fullName
                 .Replace(RootDir + "\\", string.Empty)
                 .Replace(".lua", string.Empty)
-                .Replace("\\","/");
+                .Replace("\\", "/");
         }
 
         private static readonly HashSet<string> _requires = new HashSet<string>();
-        
+
         /// <summary xml:lang="ko">
         /// require 함수 구현
         /// </summary>
@@ -74,31 +79,31 @@ namespace MoonSharpDemo
         {
             var key = GetKeyFromLuaScript(path);
 
-            if (modules.TryGetValue(key, out var file)) 
-                return Run(file);
-            
+            if (modules.TryGetValue(key, out var file))
+                return DoStringLuaFile(file);
+
             Console.WriteLine($"Error: module not found {path}");
             return null;
         }
-        
+
         /// <summary xml:lang="ko">
         /// 스크립트 실행, return값이 있는 라이브러리 모듈은 한번만 실행합니다.
         /// </summary>
-        public static DynValue Run(LuaFile file)
+        private static DynValue DoStringLuaFile(LuaFile file)
         {
             if (file.IsModule)
                 return file.Cache;
 
-            file.Cache = _script.DoString(file.Stream);
+            file.Cache = _script.DoString(file.Context);
             return file.Cache;
         }
-        
+
         /// <summary xml:lang="ko">
-        /// require 예약어 걸린 파일 이름 리스트 얻기
+        /// require 예약어 걸린 파일 리스트 업데이트
         /// </summary>
-        private static void GetRequireFileName(string file)
+        private static void RefreshRequires(string context)
         {
-            foreach (Match match in _regexRequire.Matches(file))
+            foreach (Match match in _regexRequire.Matches(context))
             {
                 var name = match.Groups[1].ToString();
                 if (!_requires.Contains(name))
@@ -106,51 +111,54 @@ namespace MoonSharpDemo
             }
         }
 
-        private static void GetAllFiles()
+        /// <summary xml:lang="ko">
+        /// 폴더 내에 안쓰는 루아 모듈 얻기
+        /// </summary>
+        private static IEnumerable<string> GetNoHasRequireFiles()
         {
-            
+            var list = new HashSet<string>();
+            var names = modules.Keys.ToArray();
+            foreach(var name in names)
+            {
+                if (!_requires.Contains(name))
+                {
+                    list.Add(name);
+                }
+            }
+            return list;
         }
 
-        private static void GetAllModules()
+        private static void RunScriptsSync(IEnumerable<string> hashSet)
         {
-            
+            foreach (var file in hashSet.Select(name => modules[name]))
+            {
+                DoStringLuaFile(file);
+            }
         }
 
-        // TODO: 쓰지 않는 모듈 파일은 로딩 하면 안됨 => 마지막 return 구문 분석?
-        ///
+        // TODO: 쓰지 않는 모듈 파일(require 호출이 없는 DynValue.Table)은 로딩 안되게 해야함.
+        // TODO: 마지막 `return` 예약어 해석 ?
         /// <summary xml:lang="ko">
         /// 모듈 로딩하여 딕셔너리에 적재
         /// </summary>
         public static void Load(string path = null)
         {
             var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
-            // foreach (var fullName in files)
-            // {
-            //     modules[GetKey(fullName)] = new LuaFile(File.ReadAllText(fullName));
-            // }
-            _script.Options.ScriptLoader = new EmbeddedResourcesScriptLoader();
-            _script.
+            
             foreach (var fullName in files)
             {
-                var chunk = File.ReadAllText(fullName);
-                GetRequireFileName(chunk);
+                var context = File.ReadAllText(fullName);
+                modules[GetKey(fullName)] = new LuaFile(context);
+                RefreshRequires(context);
             }
-            Console.Write(""_script.SourceCodeCount);
-            // return modules;
+            
+            // 모듈 먼저 임포팅
+            RunScriptsSync(_requires);
+            Console.WriteLine(@"Success: - ""Imported Require Modules""");
+            
+            // return 구문이 없는 일반 파일 실행
+            RunScriptsSync(GetNoHasRequireFiles());
+            Console.WriteLine(@"Success: - ""Imported Modules""");
         }
-    }
-
-    public class ScriptLoader : ScriptLoaderBase
-    {
-        public override object LoadFile(string file, Table globalContext)
-        {
-            return string.Format("print ([[A request to load '{0}' has been made]])", file);
-        }
-
-        public override bool ScriptFileExists(string name)
-        {
-            return true;
-        }
-        
     }
 }

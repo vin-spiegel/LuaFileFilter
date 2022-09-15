@@ -18,7 +18,7 @@ namespace MoonSharpDemo
             // var modules = ScriptManager.Load();
             // foreach (var file in modules)
             // {
-            //     ScriptManager.Run(file.Value);
+            //     ScriptManager.DoStringLuaFile(file.Value);
             // }
         }
     }
