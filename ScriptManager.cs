@@ -48,6 +48,19 @@ namespace MoonSharpDemo
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
 
+        
+
+        private static string GetKeyFromLuaScript(string path) 
+            => Regex.Replace(path, _pattern, "").Replace('.', '/');
+
+        private static string GetKey(string fullName)
+        {
+            return fullName
+                .Replace(RootDir + "\\", string.Empty)
+                .Replace(".lua", string.Empty)
+                .Replace("\\","/");
+        }
+
         /// <summary xml:lang="ko">
         /// require 함수 구현
         /// </summary>
@@ -67,18 +80,7 @@ namespace MoonSharpDemo
 
             return Run(file);
         }
-
-        private static string GetKeyFromLuaScript(string path) 
-            => Regex.Replace(path, _pattern, "").Replace('.', '/');
-
-        private static string GetKey(string fullName)
-        {
-            return fullName
-                .Replace(RootDir + "\\", string.Empty)
-                .Replace(".lua", string.Empty)
-                .Replace("\\","/");
-        }
-
+        
         public static DynValue Run(LuaFile file)
         {
             if (file.CachedDynValue == null)

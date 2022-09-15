@@ -1,4 +1,4 @@
 ﻿-- main.lua
-local t = require("lib/lib1")
 require("lib/void")
-t.logger("main logging...")
+local t = require("lib/test_library")
+t.logger("logging:       [main.lua]")

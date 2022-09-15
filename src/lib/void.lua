@@ -1,3 +1,2 @@
-﻿local t = require("lib/lib1")
-t.logger("void logging...")
-print("module loaded lib/void")
+﻿local t = require("lib/test_library")
+print("script loaded: [lib/void]")
