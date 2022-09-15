@@ -36,31 +36,21 @@ namespace MoonSharpDemo
 
     public static class ScriptManager
     {
-        private static Script _script;
-
-        private static readonly string RootDir =
-            Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
-
-        /// <summary>
-        /// [파일이름][스크립트]
-        /// </summary>
-        private static readonly Dictionary<string, LuaFile> modules = new Dictionary<string, LuaFile>();
-
-        /// <summary>
-        /// .lua 지원 regex
-        /// </summary>
+        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
         private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
-
-        private static readonly Regex _regexRequire = new Regex("require[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
-
-        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, Pattern, "").Replace('.', '/');
-
+        private static readonly Regex _requireRegex = new Regex("require[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
+        private static readonly Dictionary<string, LuaFile> _modules = new Dictionary<string, LuaFile>();
+        private static readonly HashSet<string> _requires = new HashSet<string>();
+        private static Script _script;
+        
         public static void Init()
         {
             _script = new Script();
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
-
+        
+        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, Pattern, "").Replace('.', '/');
+        
         // TODO: Replace -> Span 최적화
         private static string GetKey(string fullName)
         {
@@ -69,9 +59,7 @@ namespace MoonSharpDemo
                 .Replace(".lua", string.Empty)
                 .Replace("\\", "/");
         }
-
-        private static readonly HashSet<string> _requires = new HashSet<string>();
-
+        
         /// <summary xml:lang="ko">
         /// require 함수 구현
         /// </summary>
@@ -79,7 +67,7 @@ namespace MoonSharpDemo
         {
             var key = GetKeyFromLuaScript(path);
 
-            if (modules.TryGetValue(key, out var file))
+            if (_modules.TryGetValue(key, out var file))
                 return DoStringLuaFile(file);
 
             Console.WriteLine($"Error: module not found {path}");
@@ -103,7 +91,7 @@ namespace MoonSharpDemo
         /// </summary>
         private static void RefreshRequires(string context)
         {
-            foreach (Match match in _regexRequire.Matches(context))
+            foreach (Match match in _requireRegex.Matches(context))
             {
                 var name = match.Groups[1].ToString();
                 if (!_requires.Contains(name))
@@ -117,7 +105,7 @@ namespace MoonSharpDemo
         private static IEnumerable<string> GetNoHasRequireFiles()
         {
             var list = new HashSet<string>();
-            var names = modules.Keys.ToArray();
+            var names = _modules.Keys.ToArray();
             foreach(var name in names)
             {
                 if (!_requires.Contains(name))
@@ -130,12 +118,12 @@ namespace MoonSharpDemo
 
         private static void RunScriptsSync(IEnumerable<string> hashSet)
         {
-            foreach (var file in hashSet.Select(name => modules[name]))
+            foreach (var file in hashSet.Select(name => _modules[name]))
             {
                 DoStringLuaFile(file);
             }
         }
-
+        
         // TODO: 쓰지 않는 모듈 파일(require 호출이 없는 DynValue.Table)은 로딩 안되게 해야함.
         // TODO: 마지막 `return` 예약어 해석 ?
         /// <summary xml:lang="ko">
@@ -148,7 +136,7 @@ namespace MoonSharpDemo
             foreach (var fullName in files)
             {
                 var context = File.ReadAllText(fullName);
-                modules[GetKey(fullName)] = new LuaFile(context);
+                _modules[GetKey(fullName)] = new LuaFile(context);
                 RefreshRequires(context);
             }
             
