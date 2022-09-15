@@ -63,7 +63,7 @@ namespace MoonSharpDemo
             Console.WriteLine(file.CachedDynValue == null);
             
             // Dynamic Value가 모듈일땐 캐시 데이터 리턴
-            if (!file.CachedDynValue.IsModule())
+            if (file.CachedDynValue.IsModule())
                 return file.CachedDynValue;
 
             return Run(file);
