@@ -11,7 +11,7 @@ namespace LuaScriptLoader.Plugin
     {
         private const string RequirePattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
 
-        private static string GetKeyFromLuaScript(string path) =>
+        private static string ReplacePath(string path) =>
             Regex.Replace(path, RequirePattern, "").Replace('.', '/');
         
         /// <summary>
@@ -25,11 +25,14 @@ namespace LuaScriptLoader.Plugin
 
         private DynValue Require(string path)
         {
-            var key = GetKeyFromLuaScript(path);
+            var name = ReplacePath(path);
 
-            if (_modules.TryGetValue(key, out var file))
+            if (_modules.TryGetValue(name, out var file))
+            {
                 return DoLuaFile(file);
+            }
 
+            _script.DoString($"error('module not found: {path}')");
             Console.WriteLine($"Error: module not found {path}");
             return null;
         }
