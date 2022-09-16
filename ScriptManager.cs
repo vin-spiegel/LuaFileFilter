@@ -36,7 +36,7 @@ namespace MoonSharpDemo
 
     public static class ScriptManager
     {
-        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "src");
+        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "example");
         private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
         private static readonly Regex _requireRegex = new Regex("require[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
         private static readonly Dictionary<string, LuaFile> _modules = new Dictionary<string, LuaFile>();

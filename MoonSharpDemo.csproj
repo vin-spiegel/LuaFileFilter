@@ -50,12 +50,12 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="src\lib\test_library.lua" />
-      <Content Include="src\lib\middleclass\middleclass.lua" />
-      <Content Include="src\lib\unused.lua" />
-      <Content Include="src\lib\wait.lua" />
-      <EmbeddedResource Include="src\main.lua" />
-      <Content Include="src\test.lua" />
+      <Content Include="example\lib\test_library.lua" />
+      <Content Include="example\lib\middleclass\middleclass.lua" />
+      <Content Include="example\lib\unused.lua" />
+      <Content Include="example\lib\wait.lua" />
+      <EmbeddedResource Include="example\main.lua" />
+      <Content Include="example\test.lua" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
