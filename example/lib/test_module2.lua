@@ -6,7 +6,7 @@ end
 print("test module2 loaded")
 return {
     logger = function(...)
-    print(...)
+        print(...)
     end,
     a
 }
