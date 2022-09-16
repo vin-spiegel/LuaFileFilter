@@ -17,16 +17,17 @@ namespace MoonSharpDemo
             var modules = ScriptManager.Load();
 
             // 스크립트 실행
+            foreach (var unused in ScriptManager.GetUnusedFileNames())
+            {
+                Console.WriteLine($"Warn: Unused file - {unused}.lua");
+            }
+            
             foreach (var file in modules)
             {
                 ScriptManager.DoStringLuaFile(file.Value);
             }
             
             //
-            foreach (var unused in ScriptManager.GetUnusedFileNames())
-            {
-                Console.WriteLine($"Warn: Unused file - {unused}.lua");
-            }
         }
     }
 }
