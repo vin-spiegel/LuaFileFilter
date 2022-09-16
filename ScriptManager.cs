@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -91,12 +92,16 @@ namespace MoonSharpDemo
         /// </summary>
         private static void RefreshRequires(string context)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             foreach (Match match in _requireRegex.Matches(context))
             {
                 var name = match.Groups[1].ToString();
                 if (!_requires.Contains(name))
                     _requires.Add(name);
             }
+            watch.Stop();
+            Console.WriteLine($"{nameof(RefreshRequires)}({watch.ElapsedMilliseconds}ms)");
         }
 
         /// <summary xml:lang="ko">
@@ -104,6 +109,8 @@ namespace MoonSharpDemo
         /// </summary>
         private static IEnumerable<string> GetNoHasRequireFiles()
         {
+            var watch = new Stopwatch();
+            watch.Start();
             var list = new HashSet<string>();
             var names = _modules.Keys.ToArray();
             foreach(var name in names)
@@ -113,15 +120,21 @@ namespace MoonSharpDemo
                     list.Add(name);
                 }
             }
+            watch.Stop();
+            Console.WriteLine($"{nameof(GetNoHasRequireFiles)}({watch.ElapsedMilliseconds}ms)");
             return list;
         }
 
         private static void RunScriptsSync(IEnumerable<string> hashSet)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             foreach (var file in hashSet.Select(name => _modules[name]))
             {
                 DoStringLuaFile(file);
             }
+            watch.Stop();
+            Console.WriteLine($"{nameof(RunScriptsSync)}({watch.ElapsedMilliseconds}ms)");
         }
 
         /// <summary>
@@ -146,6 +159,8 @@ namespace MoonSharpDemo
         /// </summary>
         public static void Load(string path = null)
         {
+            var watch = new Stopwatch();
+            watch.Start();
             var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
             
             foreach (var fullName in files)
@@ -166,6 +181,8 @@ namespace MoonSharpDemo
             // return 구문이 없는 일반 파일 실행
             RunScriptsSync(GetNoHasRequireFiles());
             Console.WriteLine(@"Success: - ""Imported Business Modules""");
+            watch.Stop();
+            Console.WriteLine($"{nameof(Load)}({watch.ElapsedMilliseconds}ms)");
         }
     }
 }
