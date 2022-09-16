@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using LuaScriptLoader.Utility;
 
 namespace LuaScriptLoader.Core
 {
@@ -20,7 +21,7 @@ namespace LuaScriptLoader.Core
 
         private static readonly Regex RequireRegex =
             new Regex("require[\\s+]?[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
-        
+
         /// <summary xml:lang="ko">
         /// 모듈 로딩하여 라이브러리 파일인지 확인 후 딕셔너리에 적재
         /// </summary>
@@ -47,9 +48,14 @@ namespace LuaScriptLoader.Core
             // Library 파일이 아닌건 require 만 적재, 비즈니스 파일은 require 없어도 적재
             foreach (var file in modules)
             {
+                if (!requires.Contains(file.Key) && file.Value.IsLibrary)
+                {
+                    Logger.Warn($"Unloaded   {file.Key}.lua");
+                }
+                
                 if (requires.Contains(file.Key) || !file.Value.IsLibrary)
                 {
-                    Console.WriteLine($"{file.Key} is loaded");
+                    Logger.Success($"Loaded     {file.Key}.lua");
                     result.Add(file.Key, file.Value);
                 }
             }

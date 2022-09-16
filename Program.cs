@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using LuaScriptLoader.Plugin;
+using LuaScriptLoader.Utility;
 
 namespace LuaScriptLoader.Core
 {
@@ -17,7 +18,8 @@ namespace LuaScriptLoader.Core
         private Program()
         {
             var modules = _moduleLoader.Load(RootDir);
-            
+
+            Console.WriteLine("--------------------------------------------");
             using (var moonSharpScope = new MoonSharpScope(modules))
             {
                 foreach (var file in modules)
