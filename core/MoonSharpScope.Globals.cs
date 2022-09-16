@@ -14,6 +14,7 @@ namespace LuaScriptLoader.Core
         private void RegisterMoonSharpGlobals()
         {
             _script.Globals["require"] = (Func<string, DynValue>)Require;
+            _script.Globals["wait"] = (Func<float, DynValue>)Wait;
         }
 
         private DynValue Require(string path)
@@ -27,7 +28,7 @@ namespace LuaScriptLoader.Core
             return null;
         }
 
-        private DynValue Wait()
+        private DynValue Wait(float time)
         {
             //TODO:
             return null;
