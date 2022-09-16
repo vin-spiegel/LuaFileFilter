@@ -29,6 +29,7 @@ namespace LuaScriptLoader.Core
 
         private DynValue Wait()
         {
+            //TODO:
             return null;
         }
     }

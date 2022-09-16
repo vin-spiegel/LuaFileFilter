@@ -57,7 +57,8 @@ namespace LuaScriptLoader.Core
 
             return result;
         }
-        
+
+        #region Private
         private string GetKey(string rootPath, string fullName)
         {
             // TODO: Replace -> Span 최적화
@@ -86,6 +87,6 @@ namespace LuaScriptLoader.Core
             }
             return list;
         }
-        
+        #endregion
     }
 }
