@@ -28,7 +28,7 @@ namespace LuaScriptLoader.Core
         {
             if (file == null)
             {
-                _script.DoString("print(has no file)");
+                _script.DoString("error(has no file)");
                 return null;
             }
 
