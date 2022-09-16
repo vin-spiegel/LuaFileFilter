@@ -132,9 +132,20 @@ namespace MoonSharpDemo
             new Regex("return\\s+[a-zA-Z0-9_-]+\\(.+\\)")
         };
         
-        public static string pattern1 = "end\\s+return\\s+[a-zA-Z0-9_-]+";
-        public static string pattern2 = "return\\s+[a-zA-Z0-9_-]+(.+)";
-        public static string pattern3 = "return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}";
+        /// <summary>
+        /// for case 1 & 4
+        /// </summary>
+        public static string pattern1 = "return\\s+[a-zA-Z0-9_-]+$";
+        
+        /// <summary>
+        /// for case 3
+        /// </summary>
+        public static string pattern2 = "return\\s+[a-zA-Z0-9_-]+([.,a-zA-Z0-9_-]+)";
+        
+        /// <summary>
+        /// for case 2
+        /// </summary>
+        public static string pattern3 = "return\\s+(return\\s+[a-zA-Z0-9-_]+\\s*=\\s*|){[\\w\\W]+}";
         
         // TODO: 쓰지 않는 모듈 파일(require 호출이 없는 DynValue.Table)은 로딩 안되게 해야함.
         // TODO: 마지막 `return` 예약어 해석 ?
