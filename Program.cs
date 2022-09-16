@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using MoonSharp.Interpreter;
 
 namespace MoonSharpDemo
@@ -9,10 +10,12 @@ namespace MoonSharpDemo
         {
             new Program();
         }
+        
+        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "example");
 
         private Program()
         {
-            ScriptManager.Init();
+            ScriptManager.Init(RootDir);
             
             var modules = ScriptManager.Load();
 

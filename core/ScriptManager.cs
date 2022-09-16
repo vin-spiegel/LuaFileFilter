@@ -11,14 +11,14 @@ namespace MoonSharpDemo
 {
     public static class ScriptManager
     {
-        private static readonly string RootDir = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "example");
         private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
         private static readonly Dictionary<string, LuaFile> _modules = new Dictionary<string, LuaFile>();
-        private static readonly HashSet<string> _requires = new HashSet<string>();
         private static Script _script;
+        private static string _rootDir;
         
-        public static void Init()
+        public static void Init(string path)
         {
+            _rootDir = path;
             _script = new Script();
             _script.Globals["require"] = (Func<string, DynValue>)Require;
         }
@@ -29,7 +29,7 @@ namespace MoonSharpDemo
         private static string GetKey(string fullName)
         {
             return fullName
-                .Replace(RootDir + "\\", string.Empty)
+                .Replace(_rootDir + "\\", string.Empty)
                 .Replace(".lua", string.Empty)
                 .Replace("\\", "/");
         }
@@ -113,9 +113,12 @@ namespace MoonSharpDemo
         /// <summary xml:lang="ko">
         /// 모듈 로딩하여 라이브러리 파일인지 확인 후 딕셔너리에 적재
         /// </summary>
-        public static Dictionary<string,LuaFile> Load(string path = null)
+        public static Dictionary<string,LuaFile> Load()
         {
-            var files = Directory.GetFiles(RootDir, "*.lua", SearchOption.AllDirectories);
+            if (_rootDir == null)
+                return null;
+            
+            var files = Directory.GetFiles(_rootDir, "*.lua", SearchOption.AllDirectories);
             
             _modules.Clear();
             
