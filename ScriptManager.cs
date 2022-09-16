@@ -124,15 +124,17 @@ namespace MoonSharpDemo
             }
         }
 
-
-        private static Dictionary<string, string> _library = new Dictionary<string, string>();
-
+        
         private static readonly Regex[] ModuleCases =
         {
             new Regex("end\\s+return\\s+[a-zA-Z0-9_-]+"),
             new Regex("return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}"),
             new Regex("return\\s+[a-zA-Z0-9_-]+\\(.+\\)")
         };
+        
+        public static string pattern1 = "end\\s+return\\s+[a-zA-Z0-9_-]+";
+        public static string pattern2 = "return\\s+[a-zA-Z0-9_-]+(.+)";
+        public static string pattern3 = "return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}";
         
         // TODO: 쓰지 않는 모듈 파일(require 호출이 없는 DynValue.Table)은 로딩 안되게 해야함.
         // TODO: 마지막 `return` 예약어 해석 ?
@@ -149,8 +151,7 @@ namespace MoonSharpDemo
                 var key = GetKey(fullName);
                 _modules[key] = new LuaFile(context);
                 
-                var result = ModuleCases.Any(pattern => pattern.IsMatch(context, (int)RegexOptions.Multiline));
-
+                var result = Regex.IsMatch(context, pattern1) || Regex.IsMatch(context, pattern2) || Regex.IsMatch(context, pattern3);
                 Console.WriteLine($"{key} : {result}");
             }
             
