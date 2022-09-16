@@ -123,6 +123,16 @@ namespace MoonSharpDemo
                 DoStringLuaFile(file);
             }
         }
+
+
+        private static Dictionary<string, string> _library = new Dictionary<string, string>();
+
+        private static readonly Regex[] ModuleCases = new[]
+        {
+            new Regex("end\\s+return\\s+[a-zA-Z0-9_-]+"),
+            new Regex("return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}"),
+            new Regex("return\\s+[a-zA-Z0-9_-]+\\(.+\\)")
+        };
         
         // TODO: 쓰지 않는 모듈 파일(require 호출이 없는 DynValue.Table)은 로딩 안되게 해야함.
         // TODO: 마지막 `return` 예약어 해석 ?
@@ -136,17 +146,22 @@ namespace MoonSharpDemo
             foreach (var fullName in files)
             {
                 var context = File.ReadAllText(fullName);
-                _modules[GetKey(fullName)] = new LuaFile(context);
-                RefreshRequires(context);
+                var key = GetKey(fullName);
+                _modules[key] = new LuaFile(context);
+
+                var result = ModuleCases.Any(pattern => pattern.IsMatch(context));
+                
+                Console.WriteLine($"{key} : {result}");
             }
             
-            // 모듈 먼저 임포팅
-            RunScriptsSync(_requires);
-            Console.WriteLine(@"Success: - ""Imported Require Modules""");
-            
-            // return 구문이 없는 일반 파일 실행
-            RunScriptsSync(GetNoHasRequireFiles());
-            Console.WriteLine(@"Success: - ""Imported Modules""");
+            // RefreshRequires(context);
+            // // 모듈 먼저 임포팅
+            // RunScriptsSync(_requires);
+            // Console.WriteLine(@"Success: - ""Imported Require Modules""");
+            //
+            // // return 구문이 없는 일반 파일 실행
+            // RunScriptsSync(GetNoHasRequireFiles());
+            // Console.WriteLine(@"Success: - ""Imported Modules""");
         }
     }
 }
