@@ -1,4 +1,5 @@
-﻿using MoonSharp.Interpreter;
+﻿using System;
+using MoonSharp.Interpreter;
 
 namespace MoonSharpDemo
 {
@@ -13,13 +14,12 @@ namespace MoonSharpDemo
         {
             ScriptManager.Init();
             
-            ScriptManager.Load();
-            // ScriptRunSync
-            // var modules = ScriptManager.Load();
-            // foreach (var file in modules)
-            // {
-            //     ScriptManager.DoStringLuaFile(file.Value);
-            // }
+            var modules = ScriptManager.Load();
+
+            foreach (var file in modules)
+            {
+                ScriptManager.DoStringLuaFile(file.Value);
+            }
         }
     }
 }
