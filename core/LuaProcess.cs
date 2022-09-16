@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using MoonSharp.Interpreter;
 
 namespace LuaDivider.Core
 {
@@ -74,7 +70,6 @@ namespace LuaDivider.Core
         {
             var files = Directory.GetFiles(path, "*.lua", SearchOption.AllDirectories);
             
-            _modules.Clear();
             
             // 폴더내 모든 LuaFile 적재
             foreach (var fullName in files)
@@ -84,9 +79,9 @@ namespace LuaDivider.Core
                 var key = GetKey(fullName, path);
                 _modules[key] = new LuaFile(context, isLibraryModule);
             }
+            _modules.Clear();
 
             var requires = GetRequireFileNames();
-
             var res = new Dictionary<string, LuaFile>();
             
             // Library 파일이 아닌건 require 만 적재, 비즈니스 파일은 require 없어도 적재

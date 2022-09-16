@@ -15,23 +15,19 @@ namespace LuaDivider.Core
 
         private Program()
         {
-            LuaProcess.Init();
-            
             var modules = LuaProcess.Load(RootDir);
-
-            // 스크립트 실행
+            // Unused logging
             foreach (var unused in LuaProcess.GetUnusedFileNames())
             {
                 Console.WriteLine($"Warn: Unused file - {unused}.lua");
             }
             
-            // Unused logging
+            LuaScript.Create(modules);
+            // 스크립트 실행
             foreach (var file in modules)
             {
-                LuaProcess.DoStringLuaFile(file.Value);
+                LuaScript.DoStringLuaFile(file.Value);
             }
-            
-            //
         }
     }
 }

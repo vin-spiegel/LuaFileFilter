@@ -44,7 +44,7 @@
     <ItemGroup>
         <Compile Include="core\LuaFile.cs" />
         <Compile Include="core\LuaProcess.cs" />
-        <Compile Include="core\LuaProcess.MoonSharp.cs" />
+        <Compile Include="core\LuaScript.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

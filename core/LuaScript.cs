@@ -1,17 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MoonSharp.Interpreter;
 
 namespace LuaDivider.Core
 {
-    public static partial class LuaProcess
+    public static class LuaScript
     {
         private static Script _script;
         private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
-        public static void Init()
+        private static Dictionary<string, LuaFile> _modules;
+        public static void Create(Dictionary<string,LuaFile> files)   
         {
             _script = new Script();
             _script.Globals["require"] = (Func<string, DynValue>)Require;
+            _modules = files;
         }
         private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, Pattern, "").Replace('.', '/');
 
