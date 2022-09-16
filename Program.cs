@@ -25,6 +25,7 @@ namespace LuaDivider.Core
                 Console.WriteLine($"Warn: Unused file - {unused}.lua");
             }
             
+            // Unused logging
             foreach (var file in modules)
             {
                 LuaProcess.DoStringLuaFile(file.Value);
