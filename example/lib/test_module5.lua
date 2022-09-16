@@ -1,4 +1,5 @@
 ---@module module5
-local function foo()  
+local function foo(...)
+    print(...)
 end
 return foo
