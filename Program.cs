@@ -2,10 +2,11 @@
 using System.IO;
 using MoonSharp.Interpreter;
 
-namespace LuaDivider.Core
+namespace MoonSharpDemo
 {
     internal class Program
     {
+        private readonly ModuleLoader _moduleLoader = new ModuleLoader();
         public static void Main(string[] args)
         {
             new Program();
@@ -15,18 +16,14 @@ namespace LuaDivider.Core
 
         private Program()
         {
-            var modules = LuaProcess.Load(RootDir);
-            // Unused logging
-            foreach (var unused in LuaProcess.GetUnusedFileNames())
-            {
-                Console.WriteLine($"Warn: Unused file - {unused}.lua");
-            }
+            var modules = _moduleLoader.Load(RootDir);
             
-            LuaScript.Create(modules);
-            // 스크립트 실행
-            foreach (var file in modules)
+            using (var moonSharpScope = new MoonSharpScope(modules))
             {
-                LuaScript.DoLuaFile(file.Value);
+                foreach (var file in modules)
+                {
+                    moonSharpScope.DoStringLuaFile(file.Value);
+                }
             }
         }
     }
