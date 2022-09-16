@@ -52,6 +52,7 @@
     <ItemGroup>
       <Content Include="example\lib\test_module5.lua" />
       <Content Include="example\module_loader.lua" />
+      <Content Include="example\unused.lua" />
       <EmbeddedResource Include="example\main.lua" />
       <Content Include="example\lib\test_module1.lua" />
       <Content Include="example\lib\test_module2.lua" />
