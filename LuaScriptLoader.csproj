@@ -58,6 +58,7 @@
       <Content Include="example\lib\test_module6.lua" />
       <Content Include="example\main.lua" />
       <Content Include="example\module_loader.lua" />
+      <Content Include="example\nilFile.lua" />
       <Content Include="example\unused.lua" />
     </ItemGroup>
     <ItemGroup>
