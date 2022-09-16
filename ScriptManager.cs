@@ -165,7 +165,7 @@ namespace MoonSharpDemo
             
             // return 구문이 없는 일반 파일 실행
             RunScriptsSync(GetNoHasRequireFiles());
-            Console.WriteLine(@"Success: - ""Imported Modules""");
+            Console.WriteLine(@"Success: - ""Imported Business Modules""");
         }
     }
 }
