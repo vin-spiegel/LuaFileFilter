@@ -50,6 +50,7 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="example\lib\test_module5.lua" />
       <Content Include="example\module_loader.lua" />
       <EmbeddedResource Include="example\main.lua" />
       <Content Include="example\lib\test_module1.lua" />
