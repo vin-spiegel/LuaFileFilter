@@ -51,12 +51,13 @@
         <Compile Include="Utility\Logger.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="example\lib\test_module1.lua" />
-      <Content Include="example\lib\test_module2.lua" />
-      <Content Include="example\lib\test_module3.lua" />
-      <Content Include="example\lib\test_module4.lua" />
-      <Content Include="example\lib\test_module5.lua" />
-      <Content Include="example\lib\test_module6.lua" />
+      <Content Include="example\lib\function1.lua" />
+      <Content Include="example\lib\module1.lua" />
+      <Content Include="example\lib\module2.lua" />
+      <Content Include="example\lib\module3.lua" />
+      <Content Include="example\lib\module4.lua" />
+      <Content Include="example\lib\module5.lua" />
+      <Content Include="example\lib\module6.lua" />
       <Content Include="example\main.lua" />
       <Content Include="example\module_loader.lua" />
       <Content Include="example\nilFile.lua" />
