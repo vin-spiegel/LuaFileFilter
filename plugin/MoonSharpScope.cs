@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using LuaScriptLoader.Core;
 using MoonSharp.Interpreter;
 
@@ -8,10 +7,6 @@ namespace LuaScriptLoader.Plugin
 {
     public partial class MoonSharpScope : IDisposable
     {
-        private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
-        private static string GetKeyFromLuaScript(string path) =>
-            Regex.Replace(path, Pattern, "").Replace('.', '/');
-        
         private Script _script = new Script();
         private Dictionary<string, LuaFile> _modules;
         private readonly Dictionary<string, DynValue> _collection = new Dictionary<string, DynValue>();
