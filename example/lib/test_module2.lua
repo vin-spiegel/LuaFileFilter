@@ -3,7 +3,7 @@
 local a = function()  
     print("this is module2")
 end
-
+print("test module2 loaded")
 return {
     logger = function(...)
     print(...)
