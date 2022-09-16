@@ -8,7 +8,7 @@
         <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>MoonSharpDemo</RootNamespace>
-        <AssemblyName>MoonSharpDemo</AssemblyName>
+        <AssemblyName>LuaDivider</AssemblyName>
         <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,7 +43,9 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="core\LuaFile.cs" />
-        <Compile Include="core\ScriptManager.cs" />
+        <Compile Include="core\LuaProcess.cs" />
+        <Compile Include="core\LuaProcess.MoonSharp.cs" />
+        <Compile Include="Excecutor.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

@@ -7,63 +7,37 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MoonSharp.Interpreter;
 
-namespace MoonSharpDemo
+namespace LuaDivider.Core
 {
-    public static class ScriptManager
+    public static partial class LuaProcess
     {
-        private const string Pattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
         private static readonly Dictionary<string, LuaFile> _modules = new Dictionary<string, LuaFile>();
-        private static Script _script;
         private static string _rootDir;
-        
-        public static void Init(string path)
-        {
-            _rootDir = path;
-            _script = new Script();
-            _script.Globals["require"] = (Func<string, DynValue>)Require;
-        }
-        
-        private static string GetKeyFromLuaScript(string path) => Regex.Replace(path, Pattern, "").Replace('.', '/');
-        
-        // TODO: Replace -> Span 최적화
-        private static string GetKey(string fullName)
-        {
-            return fullName
-                .Replace(_rootDir + "\\", string.Empty)
-                .Replace(".lua", string.Empty)
-                .Replace("\\", "/");
-        }
-        
-        /// <summary xml:lang="ko">
-        /// require 함수 구현
-        /// </summary>
-        private static DynValue Require(string path)
-        {
-            var key = GetKeyFromLuaScript(path);
-
-            if (_modules.TryGetValue(key, out var file))
-                return DoStringLuaFile(file);
-
-            Console.WriteLine($"Error: module not found {path}");
-            return null;
-        }
-
         /// <summary>
         /// 모듈 export 패턴
         /// </summary>
-        private static readonly string[] patterns =
+        private static readonly string[] _libraryPatterns =
         {
             "return\\s+[a-zA-Z0-9_-]+$",
             "return\\s+[a-zA-Z0-9_-]+([.,a-zA-Z0-9_-]+)",
             "return\\s+(return\\s+[a-zA-Z0-9-_]+\\s*=\\s*|){[\\w\\W]+}"
         };
+        private static readonly Regex _requireRegex = new Regex("require[\\s+]?[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
 
+        #region Private Methods
+        // TODO: Replace -> Span 최적화
+        private static string GetKey(string fullName, string path)
+        {
+            return fullName
+                .Replace(path + "\\", string.Empty)
+                .Replace(".lua", string.Empty)
+                .Replace("\\", "/");
+        }
         private static bool IsLibraryModule(string chunk)
         {
-            return patterns.Any(pattern => Regex.IsMatch(chunk, pattern));
+            return _libraryPatterns.Any(pattern => Regex.IsMatch(chunk, pattern));
         }
-        
-        private static readonly Regex _requireRegex = new Regex("require[\\s+]?[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
+
         private static HashSet<string> GetRequireFileNames()
         {
             var list = new HashSet<string>();
@@ -78,25 +52,9 @@ namespace MoonSharpDemo
             }
             return list;
         }
+        #endregion
 
-        /// <summary xml:lang="ko">
-        /// return 값이 있는 라이브러리 모듈은 한번만 실행합니다.
-        /// </summary>
-        public static DynValue DoStringLuaFile(LuaFile file)
-        {
-            if (file == null)
-            {
-                _script.DoString("print(has no file)");
-                return null;
-            }
-
-            if (file.Cache != null && file.IsModule)
-                return file.Cache;
-            
-            file.Cache = _script.DoString(file.Context);
-            return file.Cache;
-        }
-
+        #region Public Methods
         public static HashSet<string> GetUnusedFileNames()
         {
             var list = new HashSet<string>();
@@ -109,16 +67,12 @@ namespace MoonSharpDemo
 
             return list;
         }
-
         /// <summary xml:lang="ko">
         /// 모듈 로딩하여 라이브러리 파일인지 확인 후 딕셔너리에 적재
         /// </summary>
-        public static Dictionary<string,LuaFile> Load()
+        public static Dictionary<string,LuaFile> Load(string path)
         {
-            if (_rootDir == null)
-                return null;
-            
-            var files = Directory.GetFiles(_rootDir, "*.lua", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(path, "*.lua", SearchOption.AllDirectories);
             
             _modules.Clear();
             
@@ -127,7 +81,7 @@ namespace MoonSharpDemo
             {
                 var context = File.ReadAllText(fullName);
                 var isLibraryModule = IsLibraryModule(context);
-                var key = GetKey(fullName);
+                var key = GetKey(fullName, path);
                 _modules[key] = new LuaFile(context, isLibraryModule);
             }
 
@@ -144,5 +98,6 @@ namespace MoonSharpDemo
 
             return res;
         }
+        #endregion
     }
 }

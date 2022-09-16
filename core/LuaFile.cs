@@ -1,6 +1,6 @@
 using MoonSharp.Interpreter;
 
-namespace MoonSharpDemo
+namespace LuaDivider.Core
 {
     /// <summary xml:lang="ko">
     /// 각 루아 파일이 담겨져 있는 클래스입니다.
