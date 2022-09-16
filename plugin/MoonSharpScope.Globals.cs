@@ -10,9 +10,6 @@ namespace LuaScriptLoader.Plugin
     public partial class MoonSharpScope
     {
         private const string RequirePattern = "(.lua)[\"\'\\s]?[\\)\\s]?$";
-
-        private static string ReplacePath(string path) =>
-            Regex.Replace(path, RequirePattern, "").Replace('.', '/');
         
         /// <summary>
         /// 문샤프 글로벌 함수 등록
@@ -25,12 +22,10 @@ namespace LuaScriptLoader.Plugin
 
         private DynValue Require(string path)
         {
-            var name = ReplacePath(path);
+            var name = Regex.Replace(path, RequirePattern, "").Replace('.', '/');;
 
             if (_modules.TryGetValue(name, out var file))
-            {
                 return DoLuaFile(file);
-            }
 
             _script.DoString($"error('module not found: {path}')");
             Console.WriteLine($"Error: module not found {path}");
