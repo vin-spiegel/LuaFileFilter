@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
+using LuaScriptLoader.Core;
 using LuaScriptLoader.Plugin;
-using LuaScriptLoader.Utility;
 
-namespace LuaScriptLoader.Core
+namespace LuaScriptLoader
 {
     internal class Program
     {
