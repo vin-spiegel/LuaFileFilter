@@ -43,7 +43,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="core\LuaFile.cs" />
-        <Compile Include="core\LuaScript.cs" />
         <Compile Include="core\ModuleLoader.cs" />
         <Compile Include="core\MoonSharpScope.cs" />
         <Compile Include="core\MoonSharpScope.Globals.cs" />
