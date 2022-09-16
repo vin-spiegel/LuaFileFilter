@@ -26,7 +26,7 @@ namespace LuaDivider.Core
             var key = GetKeyFromLuaScript(path);
 
             if (_modules.TryGetValue(key, out var file))
-                return DoStringLuaFile(file);
+                return DoLuaFile(file);
 
             Console.WriteLine($"Error: module not found {path}");
             return null;
@@ -34,7 +34,7 @@ namespace LuaDivider.Core
         /// <summary xml:lang="ko">
         /// return 값이 있는 라이브러리 모듈은 한번만 실행합니다.
         /// </summary>
-        public static DynValue DoStringLuaFile(LuaFile file)
+        public static DynValue DoLuaFile(LuaFile file)
         {
             if (file == null)
             {

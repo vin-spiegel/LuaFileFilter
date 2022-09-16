@@ -26,7 +26,7 @@ namespace LuaDivider.Core
             // 스크립트 실행
             foreach (var file in modules)
             {
-                LuaScript.DoStringLuaFile(file.Value);
+                LuaScript.DoLuaFile(file.Value);
             }
         }
     }
