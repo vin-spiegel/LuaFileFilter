@@ -155,7 +155,7 @@ namespace MoonSharpDemo
                 _modules[key] = new LuaFile(context);
                 
                 var result = Regex.IsMatch(context, pattern1) || Regex.IsMatch(context, pattern2) || Regex.IsMatch(context, pattern3);
-                Console.WriteLine($"{key} : {result}");
+                Console.WriteLine($"{key} file is library module: {result}");
                 RefreshRequires(context);
             }
             
