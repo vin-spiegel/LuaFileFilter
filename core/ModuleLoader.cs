@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ namespace MoonSharpDemo
 
             var modules = new Dictionary<string, LuaFile>();
             
-            // 폴더내 모든 LuaFile 적재
+            // 폴더내 모든 LuaFile Get
             foreach (var fullName in files)
             {
                 var context = File.ReadAllText(fullName);
@@ -48,7 +49,10 @@ namespace MoonSharpDemo
             foreach (var file in modules)
             {
                 if (requires.Contains(file.Key) || !file.Value.IsModule)
+                {
+                    Console.WriteLine($"{file.Key} is loaded");
                     result.Add(file.Key, file.Value);
+                }
             }
 
             return result;

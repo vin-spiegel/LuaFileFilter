@@ -22,7 +22,7 @@ namespace MoonSharpDemo
             {
                 foreach (var file in modules)
                 {
-                    moonSharpScope.DoStringLuaFile(file.Value);
+                    moonSharpScope.DoLuaFile(file.Value);
                 }
             }
         }

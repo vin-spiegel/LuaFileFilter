@@ -45,6 +45,7 @@
         <Compile Include="core\LuaFile.cs" />
         <Compile Include="core\ModuleLoader.cs" />
         <Compile Include="core\MoonSharpScope.cs" />
+        <Compile Include="core\MoonSharpScope.Globals.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -53,6 +54,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="example\lib\test_module5.lua" />
+      <Content Include="example\lib\test_module6.lua" />
       <Content Include="example\module_loader.lua" />
       <Content Include="example\unused.lua" />
       <EmbeddedResource Include="example\main.lua" />
