@@ -3,7 +3,8 @@ local modules = {
     case1 = require ("lib/test_module1"),
     case2 = require ("lib/test_module2"),
     case3 = require ("lib/test_module3"),
-    case4 = require ("lib/test_module4")
+    case4 = require ("lib/test_module4"),
+    case5 = require ("lib/test_module5"),
 }
 
 -- logger
