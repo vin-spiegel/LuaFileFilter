@@ -7,9 +7,9 @@ local modules = {
 }
 
 -- logger
-for _, module in pairs(modules) do
+for name, module in pairs(modules) do
     if module ~= nil then
-        print("success".. case1 .. "is loaded")
+        print("success: ".. name .. " is loaded")
     end
 end
 

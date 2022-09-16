@@ -124,14 +124,6 @@ namespace MoonSharpDemo
             }
         }
 
-        
-        private static readonly Regex[] ModuleCases =
-        {
-            new Regex("end\\s+return\\s+[a-zA-Z0-9_-]+"),
-            new Regex("return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}"),
-            new Regex("return\\s+[a-zA-Z0-9_-]+\\(.+\\)")
-        };
-        
         /// <summary>
         /// for case 1 & 4
         /// </summary>
@@ -164,16 +156,16 @@ namespace MoonSharpDemo
                 
                 var result = Regex.IsMatch(context, pattern1) || Regex.IsMatch(context, pattern2) || Regex.IsMatch(context, pattern3);
                 Console.WriteLine($"{key} : {result}");
+                RefreshRequires(context);
             }
             
-            // RefreshRequires(context);
-            // // 모듈 먼저 임포팅
-            // RunScriptsSync(_requires);
-            // Console.WriteLine(@"Success: - ""Imported Require Modules""");
-            //
-            // // return 구문이 없는 일반 파일 실행
-            // RunScriptsSync(GetNoHasRequireFiles());
-            // Console.WriteLine(@"Success: - ""Imported Modules""");
+            // 모듈 먼저 임포팅
+            RunScriptsSync(_requires);
+            Console.WriteLine(@"Success: - ""Imported Require Modules""");
+            
+            // return 구문이 없는 일반 파일 실행
+            RunScriptsSync(GetNoHasRequireFiles());
+            Console.WriteLine(@"Success: - ""Imported Modules""");
         }
     }
 }
