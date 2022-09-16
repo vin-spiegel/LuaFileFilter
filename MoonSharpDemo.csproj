@@ -50,11 +50,11 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="example\lib\test_library.lua" />
-      <Content Include="example\lib\middleclass\middleclass.lua" />
-      <Content Include="example\lib\unused.lua" />
-      <Content Include="example\lib\wait.lua" />
       <EmbeddedResource Include="example\main.lua" />
+      <Content Include="example\lib\test_module1.lua" />
+      <Content Include="example\lib\test_module2.lua" />
+      <Content Include="example\lib\test_module3.lua" />
+      <Content Include="example\lib\test_module4.lua" />
       <Content Include="example\test.lua" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
