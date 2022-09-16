@@ -70,7 +70,6 @@ namespace LuaDivider.Core
         {
             var files = Directory.GetFiles(path, "*.lua", SearchOption.AllDirectories);
             
-            
             // 폴더내 모든 LuaFile 적재
             foreach (var fullName in files)
             {
@@ -79,7 +78,6 @@ namespace LuaDivider.Core
                 var key = GetKey(fullName, path);
                 _modules[key] = new LuaFile(context, isLibraryModule);
             }
-            _modules.Clear();
 
             var requires = GetRequireFileNames();
             var res = new Dictionary<string, LuaFile>();
