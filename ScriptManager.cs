@@ -112,6 +112,19 @@ namespace MoonSharpDemo
             return file.Cache;
         }
 
+        public static HashSet<string> GetUnusedFileNames()
+        {
+            var list = new HashSet<string>();
+            var requires = GetRequireFileNames();
+            foreach (var file in _modules)
+            {
+                if (!requires.Contains(file.Key) && file.Value.IsModule)
+                    list.Add(file.Key);
+            }
+
+            return list;
+        }
+
         /// <summary xml:lang="ko">
         /// 모듈 로딩하여 라이브러리 파일인지 확인 후 딕셔너리에 적재
         /// </summary>
