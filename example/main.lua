@@ -7,4 +7,3 @@ require("lib/test_module4")
 print("logging main....")
 
 t.logger("Hello, World")
-

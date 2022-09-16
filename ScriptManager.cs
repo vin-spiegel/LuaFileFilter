@@ -127,7 +127,7 @@ namespace MoonSharpDemo
 
         private static Dictionary<string, string> _library = new Dictionary<string, string>();
 
-        private static readonly Regex[] ModuleCases = new[]
+        private static readonly Regex[] ModuleCases =
         {
             new Regex("end\\s+return\\s+[a-zA-Z0-9_-]+"),
             new Regex("return\\s+[a-zA-Z0-9-_]+\\s*=\\s*{[\\w\\W]+}"),
@@ -148,9 +148,9 @@ namespace MoonSharpDemo
                 var context = File.ReadAllText(fullName);
                 var key = GetKey(fullName);
                 _modules[key] = new LuaFile(context);
-
-                var result = ModuleCases.Any(pattern => pattern.IsMatch(context));
                 
+                var result = ModuleCases.Any(pattern => pattern.IsMatch(context, (int)RegexOptions.Multiline));
+
                 Console.WriteLine($"{key} : {result}");
             }
             
