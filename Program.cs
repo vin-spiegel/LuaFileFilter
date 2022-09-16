@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using MoonSharp.Interpreter;
+using LuaScriptLoader.Plugin;
 
 namespace LuaScriptLoader.Core
 {

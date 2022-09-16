@@ -44,8 +44,8 @@
     <ItemGroup>
         <Compile Include="core\LuaFile.cs" />
         <Compile Include="core\ModuleLoader.cs" />
-        <Compile Include="core\MoonSharpScope.cs" />
-        <Compile Include="core\MoonSharpScope.Globals.cs" />
+        <Compile Include="plugin\MoonSharpScope.cs" />
+        <Compile Include="plugin\MoonSharpScope.Globals.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

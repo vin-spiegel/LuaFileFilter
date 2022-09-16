@@ -36,9 +36,8 @@ namespace LuaScriptLoader.Core
             foreach (var fullName in files)
             {
                 var context = File.ReadAllText(fullName);
-                var isLibraryModule = IsLibraryModule(context);
-                var key = GetKey(rootPath, fullName);
-                modules[key] = new LuaFile(context, isLibraryModule);
+                var fileName = GetKey(rootPath, fullName);
+                modules[fileName] = new LuaFile(fileName, context, IsLibraryModule(context));
             }
             
             var requires = GetRequireFileNames(modules);
@@ -48,7 +47,7 @@ namespace LuaScriptLoader.Core
             // Library 파일이 아닌건 require 만 적재, 비즈니스 파일은 require 없어도 적재
             foreach (var file in modules)
             {
-                if (requires.Contains(file.Key) || !file.Value.IsModule)
+                if (requires.Contains(file.Key) || !file.Value.IsLibrary)
                 {
                     Console.WriteLine($"{file.Key} is loaded");
                     result.Add(file.Key, file.Value);

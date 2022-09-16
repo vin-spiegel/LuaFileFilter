@@ -1,7 +1,7 @@
 using System;
 using MoonSharp.Interpreter;
 
-namespace LuaScriptLoader.Core
+namespace LuaScriptLoader.Plugin
 {
     /// <summary>
     /// 문샤프 글로벌 함수

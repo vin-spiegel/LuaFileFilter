@@ -1,5 +1,3 @@
-using MoonSharp.Interpreter;
-
 namespace LuaScriptLoader.Core
 {
     /// <summary xml:lang="ko">
@@ -7,13 +5,15 @@ namespace LuaScriptLoader.Core
     /// </summary>
     public class LuaFile
     {
+        public string Name { get; }
         public string Context { get; }
-        public bool IsModule { get; }
-        public DynValue Cache { get; set; }
-        public LuaFile(string context, bool isModule = false)
+        public bool IsLibrary { get; }
+        public bool Cached { get; set; }
+        public LuaFile(string name, string context, bool isLibrary = false)
         {
+            Name = name;
             Context = context;
-            IsModule = isModule;
+            IsLibrary = isLibrary;
         }
     }
 }

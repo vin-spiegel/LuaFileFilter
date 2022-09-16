@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using LuaScriptLoader.Core;
 using MoonSharp.Interpreter;
 
-namespace LuaScriptLoader.Core
+namespace LuaScriptLoader.Plugin
 {
     public partial class MoonSharpScope : IDisposable
     {
@@ -12,9 +13,9 @@ namespace LuaScriptLoader.Core
             Regex.Replace(path, Pattern, "").Replace('.', '/');
         
         private Script _script = new Script();
-        
         private Dictionary<string, LuaFile> _modules;
-
+        private readonly Dictionary<string, DynValue> _collection = new Dictionary<string, DynValue>();
+        
         public MoonSharpScope(Dictionary<string, LuaFile> modules)
         {
             _modules = modules;
@@ -31,21 +32,21 @@ namespace LuaScriptLoader.Core
                 _script.DoString("error(has no file)");
                 return null;
             }
+            
+            // 라이브러리 모듈일때는 스크립트 실행 안하고 캐시만 넘겨줌
+            if (file.Cached && file.IsLibrary)
+                return _collection[file.Name];
 
-            // 파일에 캐시가 있지만, 라이브러리 모듈일때는 스크립트 실행 안하고 캐시만 넘겨줌
-            if (file.Cache != null && file.IsModule)
-                return file.Cache;
-
-            // 파일에 캐시가 있고, 비즈니스 파일일때
-            if (file.Cache != null && file.Cache.Type == DataType.Function)
+            if (file.Cached && _collection[file.Name].Type == DataType.Function)
             {
-                file.Cache.Function.Call();
+                _collection[file.Name].Function.Call();
                 return null;
             }
 
             // 첫 실행일 경우 파일 캐싱
-            file.Cache = _script.DoString(file.Context);
-            return file.Cache;
+            _collection[file.Name] = _script.DoString(file.Context);
+            file.Cached = true;
+            return _collection[file.Name];
         }
 
         #region IDisposable
@@ -54,6 +55,7 @@ namespace LuaScriptLoader.Core
         {
             _modules?.Clear();
             _modules = null;
+            _collection?.Clear();
             _script = null;
         }
 
