@@ -1,6 +1,6 @@
 # LuaFileFilter
+This Program can distinguish which is a Lua library module file.
 
-This module distinguishes library files from business files.
-
-# Target
-dotnet framework 4.6.2
+# Dependency
+- dotnet framework 4.6.2
+- MoonSharp (optional)
