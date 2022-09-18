@@ -9,6 +9,7 @@ namespace LuaScriptLoader.Core
 {
     public class ModuleLoader
     {
+
         /// <summary>
         /// 모듈 export 패턴
         /// </summary>
@@ -59,7 +60,7 @@ namespace LuaScriptLoader.Core
                     result.Add(file.Key, file.Value);
                 }
             }
-
+            Logger.Success($"Loaded Lua Files: {result.Count} / {modules.Count}");
             return result;
         }
 

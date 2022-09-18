@@ -42,6 +42,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Cli\Command.cs" />
         <Compile Include="core\LuaFile.cs" />
         <Compile Include="core\ModuleLoader.cs" />
         <Compile Include="plugin\MoonSharpScope.cs" />
