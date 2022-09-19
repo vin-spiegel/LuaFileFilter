@@ -43,8 +43,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Cli\Command.cs" />
+        <Compile Include="core\LuaLoader.cs" />
         <Compile Include="core\LuaFile.cs" />
-        <Compile Include="core\ModuleLoader.cs" />
         <Compile Include="plugin\MoonSharpScope.cs" />
         <Compile Include="plugin\MoonSharpScope.Globals.cs" />
         <Compile Include="Program.cs" />
@@ -52,23 +52,23 @@
         <Compile Include="Utility\Logger.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="example\lib\function1.lua" />
-      <Content Include="example\lib\module1.lua" />
-      <Content Include="example\lib\module2.lua" />
-      <Content Include="example\lib\module3.lua" />
-      <Content Include="example\lib\module4.lua" />
-      <Content Include="example\lib\module5.lua" />
-      <Content Include="example\lib\module6.lua" />
-      <Content Include="example\main.lua" />
-      <Content Include="example\module_loader.lua" />
-      <Content Include="example\nilFile.lua" />
-      <Content Include="example\unused.lua" />
+      <Content Include="example\ServerScripts\lib\depth1\depth2\function2.lua" />
+      <Content Include="example\ServerScripts\lib\depth1\depth2\module6.lua" />
+      <Content Include="example\ServerScripts\lib\depth1\function1.lua" />
+      <Content Include="example\ServerScripts\lib\depth1\module5.lua" />
+      <Content Include="example\ServerScripts\lib\module1.lua" />
+      <Content Include="example\ServerScripts\lib\module2.lua" />
+      <Content Include="example\ServerScripts\lib\module3.lua" />
+      <Content Include="example\ServerScripts\lib\module4.lua" />
+      <Content Include="example\ServerScripts\main.lua" />
+      <Content Include="example\ServerScripts\module_loader.lua" />
+      <Content Include="example\ServerScripts\nilFile.lua" />
+      <Content Include="example\ServerScripts\unused.lua" />
+      <Content Include="example\Shared\s1\_2.lua" />
+      <Content Include="example\Shared\_1.lua" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="example\business" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

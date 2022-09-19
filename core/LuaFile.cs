@@ -7,13 +7,18 @@ namespace LuaScriptLoader.Core
     {
         public string Name { get; }
         public string Context { get; }
+        public string FullName { get; }
         public bool IsLibrary { get; }
-        public bool Cached { get; set; }
-        public LuaFile(string name, string context, bool isLibrary = false)
+        public bool IsPrimary { get; }
+        
+        public LuaFile(string name, string fullName, string context, bool isLibrary = false, bool isPrimary = false)
         {
             Name = name;
             Context = context;
+            FullName = fullName;
             IsLibrary = isLibrary;
+            IsPrimary = isPrimary;
         }
+        public bool Cached { get; set; }
     }
 }

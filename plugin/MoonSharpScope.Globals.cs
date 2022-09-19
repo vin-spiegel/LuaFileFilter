@@ -17,7 +17,7 @@ namespace LuaScriptLoader.Plugin
         private void RegisterMoonSharpGlobals()
         {
             _script.Globals["require"] = (Func<string, DynValue>)Require;
-            _script.Globals["wait"] = (Func<float, DynValue>)Wait;
+            // _script.Globals["wait"] = (Func<float, DynValue>)Wait;
         }
 
         private DynValue Require(string path)
@@ -27,6 +27,7 @@ namespace LuaScriptLoader.Plugin
             if (_modules.TryGetValue(name, out var file))
                 return DoLuaFile(file);
 
+            // Conso
             _script.DoString($"error('module not found: {path}')");
             Console.WriteLine($"Error: module not found {path}");
             return null;
