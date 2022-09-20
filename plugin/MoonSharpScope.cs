@@ -17,32 +17,37 @@ namespace LuaScriptLoader.Plugin
             RegisterMoonSharpGlobals();
         }
 
+        public void Print()
+        {
+            foreach (var pair in _dynValues)
+            {
+                Console.WriteLine($"{pair.Key} file is {pair.Value.Type}");
+            }
+        }
+
         /// <summary xml:lang="ko">
         /// return 값이 있는 라이브러리 모듈은 한번만 실행합니다.
         /// </summary>
-        public DynValue DoLuaFile(TScript file)
+        public DynValue DoLuaFile(TScript tScript)
         {
-            if (file == null)
+            if (tScript == null)
             {
-                _script.DoString("error('has no file')");
+                Console.WriteLine("error: has no file");
                 return null;
+            }
+
+            if (!_dynValues.TryGetValue(tScript.name, out var dynValue))
+            {
+                // 첫 실행일 경우 파일 캐싱
+                return _dynValues[tScript.name] = _script.DoString(tScript.context);
             }
             
-            // 라이브러리 모듈일때는 스크립트 실행 안하고 캐시만 넘겨줌
-            if (file.cached && file.isLibrary)
-                return _dynValues[file.name];
-
-            if (file.cached && _dynValues[file.name].Type == DataType.Void)
-            {
-                Console.WriteLine($"void -> {file.name}");
-                _dynValues[file.name].Function.Call();
-                return null;
-            }
-
-            // 첫 실행일 경우 파일 캐싱
-            _dynValues[file.name] = _script.DoString(file.context);
-            file.cached = true;
-            return _dynValues[file.name];
+            // return값이 Void 타입이 아닐 경우 라이브러리 모듈로 간주
+            if (dynValue.Type != DataType.Void)
+                return dynValue;
+            
+            dynValue.Function.Call();
+            return null;
         }
 
         #region IDisposable
