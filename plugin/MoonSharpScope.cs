@@ -32,8 +32,9 @@ namespace LuaScriptLoader.Plugin
             if (file.cached && file.isLibrary)
                 return _dynValues[file.name];
 
-            if (file.cached && _dynValues[file.name].Type == DataType.Function)
+            if (file.cached && _dynValues[file.name].Type == DataType.Void)
             {
+                Console.WriteLine($"void -> {file.name}");
                 _dynValues[file.name].Function.Call();
                 return null;
             }
