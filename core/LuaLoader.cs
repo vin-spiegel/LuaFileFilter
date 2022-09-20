@@ -13,7 +13,7 @@ namespace LuaScriptLoader.Core
         private string _workDir = ".";
         private string _dirName;
         private static readonly Regex _regex = new Regex("[^-]require[\\s+]?[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
-        
+
         /// <summary>
         /// 모듈 export 패턴
         /// </summary>
@@ -78,7 +78,10 @@ namespace LuaScriptLoader.Core
         private void RecurseFiles(string name)
         {
             if (_requires.ContainsKey(name) && _requires[name])
+            {
                 return;
+            }
+
             
             var fullName = GetFullName(_workDir, name);
 
@@ -86,6 +89,7 @@ namespace LuaScriptLoader.Core
                 return;
 
             var context = File.ReadAllText(fullName);
+            
             _requires[name] = true;
             
             // 모듈 딕셔너리에 LuaFile 생성
@@ -120,6 +124,9 @@ namespace LuaScriptLoader.Core
 
         public Dictionary<string, LuaFile> Load(string rootPath, string dir)
         {
+            _requires.Clear();
+            _modules.Clear();
+            
             var mainPath = Path.Combine(rootPath, dir);
             var di = new DirectoryInfo(mainPath);
             
@@ -128,13 +135,16 @@ namespace LuaScriptLoader.Core
             
             _dirName = dir;
             _workDir = di.FullName;
-            
+
             foreach (var path in Directory.GetFiles(mainPath, "*.lua"))
             {
                 var file = File.ReadAllText(path);
                 if (!IsLibraryModule(file))
+                {
                     RecurseFiles(Path.GetFileNameWithoutExtension(path));
+                }
             }
+            
             return _modules;
         }
 

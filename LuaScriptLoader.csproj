@@ -52,6 +52,15 @@
         <Compile Include="Utility\Logger.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="example\Scripts\lib\depth1\depth2\function2.lua" />
+      <Content Include="example\Scripts\lib\depth1\depth2\module6.lua" />
+      <Content Include="example\Scripts\lib\depth1\function1.lua" />
+      <Content Include="example\Scripts\lib\depth1\module5.lua" />
+      <Content Include="example\Scripts\lib\module1.lua" />
+      <Content Include="example\Scripts\lib\module2.lua" />
+      <Content Include="example\Scripts\lib\module3.lua" />
+      <Content Include="example\Scripts\lib\module4.lua" />
+      <Content Include="example\Scripts\main.lua" />
       <Content Include="example\ServerScripts\lib\depth1\depth2\function2.lua" />
       <Content Include="example\ServerScripts\lib\depth1\depth2\module6.lua" />
       <Content Include="example\ServerScripts\lib\depth1\function1.lua" />
