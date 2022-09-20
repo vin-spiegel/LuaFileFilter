@@ -3,5 +3,7 @@
 --- Created by suho.
 --- DateTime: 2022-09-20 오후 7:51
 ---
-print("this is Scripts/main.lua")
-require("_1")
+require("lib/module4")
+require("test")
+
+print("main.lua logging...")
