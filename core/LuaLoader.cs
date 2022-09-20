@@ -27,7 +27,7 @@ namespace LuaScriptLoader.Core
         /// <summary xml:lang="ko">
         /// require 예약어 걸린 파일 이름 리스트 얻기
         /// </summary>
-        private List<string> GetNewFileNames(string file)
+        private List<string> GetRequireFileNames(string file)
         {
             var matches = _regex.Matches(file);
             
@@ -87,23 +87,23 @@ namespace LuaScriptLoader.Core
 
             var context = File.ReadAllText(fullName);
             _requires[name] = true;
-            var isPrimary = new FileInfo(fullName).Directory?.ToString() == _workDir;
+            
             // 모듈 딕셔너리에 LuaFile 생성
             _modules.Add(name, new LuaFile(
                 name, 
                 fullName, 
                 context, 
                 IsLibraryModule(context), 
-                isPrimary));
+                new FileInfo(fullName).Directory?.ToString() == _workDir));
             
             // 뎁스 추적하며 require 예약어가 걸린 파일들 생성하기
-            foreach (var newName in GetNewFileNames(context))
+            foreach (var newName in GetRequireFileNames(context))
             {
                 RecurseFiles(newName);
             }
         }
         
-        public LuaFile[] LoadPrimaryModules()
+        public IEnumerable<LuaFile> LoadPrimaryModules()
         {
             if (_modules == null)
                 return null;
@@ -135,8 +135,6 @@ namespace LuaScriptLoader.Core
                 if (!IsLibraryModule(file))
                     RecurseFiles(Path.GetFileNameWithoutExtension(path));
             }
-            
-            // _requires.Clear();
             return _modules;
         }
 

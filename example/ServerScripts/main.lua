@@ -1,4 +1,4 @@
 ﻿-- main.lua
 local myModule = require("module_loader")
-require("_1")
+require("s1/_2")
 print("logging main....")

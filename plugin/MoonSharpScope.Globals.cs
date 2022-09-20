@@ -27,7 +27,6 @@ namespace LuaScriptLoader.Plugin
             if (_modules.TryGetValue(name, out var file))
                 return DoLuaFile(file);
 
-            // Conso
             _script.DoString($"error('module not found: {path}')");
             Console.WriteLine($"Error: module not found {path}");
             return null;

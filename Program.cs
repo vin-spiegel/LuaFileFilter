@@ -67,6 +67,11 @@ namespace LuaScriptLoader
                     var loader = new LuaLoader();
                     var modules = loader.Load(RootPath, "ServerScripts");
                     
+                    foreach (var pair in modules)
+                    {
+                        Console.WriteLine(pair.Key);
+                    }
+                    
                     using (var moonSharpScope = new MoonSharpScope(modules))
                     {
                         var luaFiles = loader.LoadPrimaryModules().OrderBy(file => file.Name);

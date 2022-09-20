@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using LuaScriptLoader.Core;
 using MoonSharp.Interpreter;
 
@@ -16,13 +15,6 @@ namespace LuaScriptLoader.Plugin
         {
             _modules = modules;
             RegisterMoonSharpGlobals();
-        }
-
-        public Dictionary<string, LuaFile> GetPrimaryModules()
-        {
-            return _modules
-                .Where(pair => pair.Value.IsPrimary && !pair.Value.IsLibrary)
-                .ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         /// <summary xml:lang="ko">
