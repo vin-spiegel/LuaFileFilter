@@ -12,7 +12,7 @@ namespace LuaScriptLoader
 {
     internal class Program
     {
-        private readonly Dictionary<string, LuaFile> _modules;
+        private readonly Dictionary<string, TScript> _modules;
         
         public static void Main(string[] args)
         {
@@ -21,7 +21,7 @@ namespace LuaScriptLoader
         
         private static readonly string RootPath = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "example");
 
-        private void RunScripts(Dictionary<string, LuaFile> modules)
+        private void RunScripts(Dictionary<string, TScript> modules)
         {
             using (var moonSharpScope = new MoonSharpScope(modules))
             {
@@ -68,7 +68,7 @@ namespace LuaScriptLoader
                     var modules = loader.Load(RootPath, "ServerScripts");
                     using (var moonSharpScope = new MoonSharpScope(modules))
                     {
-                        var luaFiles = loader.LoadPrimaryModules().OrderBy(file => file.Name);
+                        var luaFiles = loader.LoadPrimaryModules().OrderBy(file => file.name);
                         foreach (var file in luaFiles)
                         {
                             moonSharpScope.DoLuaFile(file);
@@ -79,7 +79,7 @@ namespace LuaScriptLoader
                     var clientModules = loader.Load(RootPath, "Scripts");
                     using (var moonSharpScope = new MoonSharpScope(clientModules))
                     {
-                        var luaFiles = loader.LoadPrimaryModules().OrderBy(file => file.Name);
+                        var luaFiles = loader.LoadPrimaryModules().OrderBy(file => file.name);
                         foreach (var file in luaFiles)
                         {
                             moonSharpScope.DoLuaFile(file);

@@ -9,7 +9,7 @@ namespace LuaScriptLoader.Core
     public class LuaLoader
     {
         private readonly Dictionary<string, bool> _requires = new Dictionary<string, bool>();
-        private Dictionary<string, LuaFile> _modules = new Dictionary<string, LuaFile>();
+        private Dictionary<string, TScript> _modules = new Dictionary<string, TScript>();
         private string _workDir = ".";
         private string _dirName;
         private static readonly Regex _regex = new Regex("[^-]require[\\s+]?[\\(]?[\"\']([0-9\\/a-zA-Z_-]+)[\"\'][\\)]?");
@@ -81,7 +81,6 @@ namespace LuaScriptLoader.Core
             {
                 return;
             }
-
             
             var fullName = GetFullName(_workDir, name);
 
@@ -93,7 +92,7 @@ namespace LuaScriptLoader.Core
             _requires[name] = true;
             
             // 모듈 딕셔너리에 LuaFile 생성
-            _modules.Add(name, new LuaFile(
+            _modules.Add(name, new TScript(
                 name, 
                 fullName, 
                 context, 
@@ -107,22 +106,22 @@ namespace LuaScriptLoader.Core
             }
         }
         
-        public IEnumerable<LuaFile> LoadPrimaryModules()
+        public IEnumerable<TScript> LoadPrimaryModules()
         {
             if (_modules == null)
                 return null;
 
-            var list = new List<LuaFile>();
+            var list = new List<TScript>();
             foreach (var pair in _modules)
             {
-                if(pair.Value.IsPrimary && !pair.Value.IsLibrary)
+                if(pair.Value.isPrimary && !pair.Value.isLibrary)
                     list.Add(pair.Value);
             }
 
             return list.ToArray();
         }
 
-        public Dictionary<string, LuaFile> Load(string rootPath, string dir)
+        public Dictionary<string, TScript> Load(string rootPath, string dir)
         {
             _requires.Clear();
             _modules.Clear();

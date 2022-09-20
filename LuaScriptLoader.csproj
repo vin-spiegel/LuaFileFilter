@@ -44,7 +44,7 @@
     <ItemGroup>
         <Compile Include="Cli\Command.cs" />
         <Compile Include="core\LuaLoader.cs" />
-        <Compile Include="core\LuaFile.cs" />
+        <Compile Include="core\TScript.cs" />
         <Compile Include="plugin\MoonSharpScope.cs" />
         <Compile Include="plugin\MoonSharpScope.Globals.cs" />
         <Compile Include="Program.cs" />
