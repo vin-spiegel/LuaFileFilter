@@ -92,12 +92,13 @@ namespace LuaScriptLoader.Core
             _requires[name] = true;
             
             // 모듈 딕셔너리에 LuaFile 생성
-            _modules.Add(name, new TScript(
-                name, 
-                fullName, 
-                context, 
-                IsLibraryModule(context), 
-                new FileInfo(fullName).Directory?.ToString() == _workDir));
+            if (!_modules.ContainsKey(name))
+                _modules.Add(name, new TScript(
+                    name, 
+                    fullName, 
+                    context, 
+                    IsLibraryModule(context), 
+                    new FileInfo(fullName).Directory?.ToString() == _workDir));
             
             // 뎁스 추적하며 require 예약어가 걸린 파일들 생성하기
             foreach (var newName in GetRequireFileNames(context))
