@@ -4,8 +4,8 @@
 --- DateTime: 2022-09-20 오후 11:18
 ---
 
-print("test.lua logging")
+print("test2.lua logging")
 
 return function(...)
-    print("test.function called")
+    print("test2.function called")
 end

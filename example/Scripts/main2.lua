@@ -3,8 +3,8 @@
 --- Created by suho.
 --- DateTime: 2022-09-20 오후 7:51
 ---
-require("lib/module4")
+--require("lib/module4")
+--require("test")
 local a = require("test")
-
-print("main.lua logging...")
-a()
+print("main2.lua logging...")
+a();
