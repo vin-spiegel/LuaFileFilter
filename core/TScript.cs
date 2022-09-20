@@ -11,20 +11,11 @@ namespace LuaScriptLoader.Core
         public string fullName { get; }
         public bool isLibrary { get; }
         public bool isPrimary { get; }
-        public bool cached { get; set; }
         
         public TScript(string name, string fullName, string context, bool isLibrary = false, bool isPrimary = false)
         {
             this.name = name;
             this.context = context;
-            this.fullName = fullName;
-            this.isLibrary = isLibrary;
-            this.isPrimary = isPrimary;
-        }
-        public TScript(string name, string fullName, byte data, bool isLibrary = false, bool isPrimary = false)
-        {
-            this.name = name;
-            this.data = data;
             this.fullName = fullName;
             this.isLibrary = isLibrary;
             this.isPrimary = isPrimary;
