@@ -77,10 +77,8 @@ namespace LuaScriptLoader.Core
         /// <param name="name"></param>
         private void RecurseFiles(string name)
         {
-            if (_requires.ContainsKey(name) && _requires[name])
-            {
+            if ((_requires.ContainsKey(name) && _requires[name]) || _modules.ContainsKey(name))
                 return;
-            }
             
             var fullName = GetFullName(_workDir, name);
 
@@ -92,13 +90,12 @@ namespace LuaScriptLoader.Core
             _requires[name] = true;
             
             // 모듈 딕셔너리에 LuaFile 생성
-            if (!_modules.ContainsKey(name))
-                _modules.Add(name, new TScript(
-                    name, 
-                    fullName, 
-                    context, 
-                    IsLibraryModule(context), 
-                    new FileInfo(fullName).Directory?.ToString() == _workDir));
+            _modules[name] = new TScript(
+                name, 
+                fullName, 
+                context, 
+                IsLibraryModule(context),
+                Path.GetDirectoryName(fullName) == _workDir);
             
             // 뎁스 추적하며 require 예약어가 걸린 파일들 생성하기
             foreach (var newName in GetRequireFileNames(context))
@@ -115,8 +112,12 @@ namespace LuaScriptLoader.Core
             var list = new List<TScript>();
             foreach (var pair in _modules)
             {
-                if(pair.Value.isPrimary && !pair.Value.isLibrary)
+                if (pair.Value.isPrimary && !pair.Value.isLibrary)
+                {
+                    Console.WriteLine(pair.Key);
                     list.Add(pair.Value);
+                }
+
             }
 
             return list.ToArray();
